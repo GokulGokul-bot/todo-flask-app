@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Todo App</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 50px auto; }
+        h1 { color: #1a73e8; }
+        input { padding: 8px; width: 70%; }
+        button { padding: 8px 16px; background: #1a73e8; color: white; border: none; }
+        li { margin: 10px 0; font-size: 18px; }
+        a { color: red; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Gokul's Todo List</h1>
+    <form action="/add" method="post">
+        <input type="text" name="task" placeholder="Enter a task...">
+        <button type="submit">Add</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+        <li>{{ task }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
