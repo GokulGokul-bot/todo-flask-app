@@ -1,26 +1,240 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Todo App</title>
-    <style>
-        body { font-family: Arial; max-width: 500px; margin: 50px auto; }
-        h1 { color: #1a73e8; }
-        input { padding: 8px; width: 70%; }
-        button { padding: 8px 16px; background: #1a73e8; color: white; border: none; }
-        li { margin: 10px 0; font-size: 18px; }
-        a { color: red; margin-left: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gokul's Todo List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f4ff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(80,100,220,0.10);
+      padding: 36px 32px 32px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .header { margin-bottom: 28px; }
+
+    .header h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      letter-spacing: -0.5px;
+    }
+
+    .header h1 span { color: #4f6ef7; }
+
+    .header p {
+      font-size: 0.85rem;
+      color: #8a93b2;
+      margin-top: 4px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e8ecff;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      color: #1a1a2e;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #f7f9ff;
+    }
+
+    .input-row input:focus {
+      border-color: #4f6ef7;
+      background: #fff;
+    }
+
+    .input-row input::placeholder { color: #b0b8d1; }
+
+    .btn-add {
+      padding: 12px 20px;
+      background: #4f6ef7;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover { background: #3a57e8; }
+    .btn-add:active { transform: scale(0.97); }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      flex: 1;
+      background: #f0f4ff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+
+    .stat .num {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4f6ef7;
+    }
+
+    .stat .label {
+      font-size: 0.72rem;
+      color: #8a93b2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #b0b8d1;
+      margin-bottom: 10px;
+    }
+
+    .todo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      background: #f7f9ff;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    .todo-item:hover {
+      border-color: #dce3ff;
+      background: #fff;
+    }
+
+    .todo-text {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      word-break: break-word;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 7px;
+      color: #c5ccec;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-delete:hover {
+      background: #ffe8e8;
+      color: #e05252;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 32px 0 16px;
+      color: #b0b8d1;
+      font-size: 0.9rem;
+    }
+
+    .empty .icon { font-size: 2.5rem; margin-bottom: 8px; }
+  </style>
 </head>
 <body>
-    <h1>Gokul's Todo List</h1>
-    <form action="/add" method="post">
-        <input type="text" name="task" placeholder="Enter a task...">
-        <button type="submit">Add</button>
-    </form>
-    <ul>
-        {% for task in tasks %}
-        <li>{{ task }}</li>
-        {% endfor %}
-    </ul>
+<div class="card">
+
+  <div class="header">
+    <h1><span>Gokul's</span> Todo List</h1>
+    <p>Stay on top of your day ✨</p>
+  </div>
+
+  <form action="/add" method="post">
+    <div class="input-row">
+      <input type="text" name="task" placeholder="Add a new task..." required />
+      <button type="submit" class="btn-add">Add</button>
+    </div>
+  </form>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">{{ tasks|length }}</div>
+      <div class="label">Total</div>
+    </div>
+    <div class="stat">
+      <div class="num">0</div>
+      <div class="label">Done</div>
+    </div>
+    <div class="stat">
+      <div class="num">{{ tasks|length }}</div>
+      <div class="label">Left</div>
+    </div>
+  </div>
+
+  <div class="section-label">Tasks</div>
+
+  {% if tasks %}
+  <ul class="todo-list">
+    {% for task in tasks %}
+    <li class="todo-item">
+      <span class="todo-text">{{ task }}</span>
+      <form action="/delete/{{ loop.index0 }}" method="post" style="margin:0;">
+        <button type="submit" class="btn-delete" title="Delete">✕</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty">
+    <div class="icon">📋</div>
+    No tasks yet — add one above!
+  </div>
+  {% endif %}
+
+</div>
 </body>
 </html>
